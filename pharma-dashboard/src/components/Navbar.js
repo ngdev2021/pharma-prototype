@@ -1,30 +1,30 @@
 // src/components/Navbar.js
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import styled from 'styled-components';
 
-const Navbar = () => {
+const StyledNavbar = styled(Navbar)`
+  background-color: #343a40;
+`;
+
+const AppNavbar = () => {
   return (
-    <nav className="navbar">
-      <ul>
-        <li>
-          <Link to="/users">User Management</Link>
-        </li>
-        <li>
-          <Link to="/inventory">Inventory Management</Link>
-        </li>
-        <li>
-          <Link to="/orders">Order Management</Link>
-        </li>
-        <li>
-          <Link to="/suppliers">Supplier Management</Link>
-        </li>
-        <li>
-          <Link to="/fda-data">FDA Data Management</Link>
-        </li>
-      </ul>
-    </nav>
+    <StyledNavbar expand="lg" variant="dark">
+      <Container>
+        <Navbar.Brand href="/">Pharma Dashboard</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/users">Users</Nav.Link>
+            <Nav.Link href="/inventory">Inventory</Nav.Link>
+            <Nav.Link href="/orders">Orders</Nav.Link>
+            <Nav.Link href="/suppliers">Suppliers</Nav.Link>
+            <Nav.Link href="/fda-data">FDA Data</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </StyledNavbar>
   );
 };
 
-export default Navbar;
+export default AppNavbar;

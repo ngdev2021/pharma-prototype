@@ -1,6 +1,12 @@
 // src/components/OrderManagement.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Table, Container } from 'react-bootstrap';
+import styled from 'styled-components';
+
+const StyledContainer = styled(Container)`
+  margin-top: 20px;
+`;
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -22,18 +28,28 @@ const OrderManagement = () => {
   }, []);
 
   return (
-    <div>
+    <StyledContainer>
       <h1>Order Management</h1>
       {error && <p>There was an error fetching the orders!</p>}
-      <ul>
-        {orders.map((order) => (
-          <li key={order._id}>
-            Order ID: {order._id}, User ID: {order.userId}, Status:{' '}
-            {order.status}
-          </li>
-        ))}
-      </ul>
-    </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order._id}>
+              <td>{order._id}</td>
+              <td>{order.userId}</td>
+              <td>{order.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </StyledContainer>
   );
 };
 

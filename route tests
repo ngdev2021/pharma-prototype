@@ -1,0 +1,63 @@
+// Curl Commands
+// Create a new user
+// curl -X POST -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "
+//
+// Create a new inventory item
+// curl -X POST -H "Content-Type: application/json" -d '{"name": "Tylenol", "quantity": 100
+//
+// Create a new order
+// curl -X POST -H "Content-Type: application/json" -d '{"userId": "60a4c4b8c7b5f30015d7
+//
+// Create a new supplier
+// curl -X POST -H "Content-Type: application/json" -d '{"name": "Pfizer", "address": "123
+//
+// Get all users
+// curl http://localhost:5000/api/users
+//
+// Get all inventory items
+// curl http://localhost:5000/api/inventory
+//
+// Get all orders
+// curl http://localhost:5000/api/orders
+//
+// Get all suppliers
+// curl http://localhost:5000/api/suppliers
+//
+// Get FDA data
+// curl http://localhost:5000/api/fda
+//
+// Create new FDA data entry
+// curl -X POST -H "Content-Type: application/json" -d '{"name": "Tylenol", "description": "
+//
+// Get all FDA data entries
+// curl http://localhost:5000/api/fda
+//
+// Update a user
+// curl -X PUT -H "Content-Type: application/json" -d '{"name": "Jane Doe", "email": "jan
+//
+// Update an inventory item
+// curl -X PUT -H "Content-Type: application/json" -d '{"name": "Tylenol", "quantity": 200
+//
+// Update an order
+// curl -X PUT -H "Content-Type: application/json" -d '{"userId": "60a4c4b8c7b5f30015d7d
+//
+// Update a supplier
+// curl -X PUT -H "Content-Type: application/json" -d '{"name": "Pfizer", "address": "456
+//
+// Delete a user
+// curl -X DELETE http://localhost:5000/api/users/60a4c4b8c7b5f30015d7d4e4
+//
+// Delete an inventory item
+// curl -X DELETE http://localhost:5000/api/inventory/60a4c4b8c7b5f30015d7d4e4
+//
+// Delete an order
+// curl -X DELETE http://localhost:5000/api/orders/60a4c4b8c7b5f30015d7d4e4
+//
+// Delete a supplier
+// curl -X DELETE http://localhost:5000/api/suppliers/60a4c4b8c7b5f30015d7d4e4
+//
+// Delete an FDA data entry
+// curl -X DELETE http://localhost:5000/api/fda/60a4c4b8c7b5f30015d7d4e4
+//
+// Get a user by ID
+// curl http://localhost:5000/api/users/60a4c4b8c7b5f30015d7d4e4

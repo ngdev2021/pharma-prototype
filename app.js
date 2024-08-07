@@ -21,6 +21,19 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+// Routes
+const userRoutes = require('./routes/user');
+const inventoryRoutes = require('./routes/inventory');
+const orderRoutes = require('./routes/order');
+const supplierRoutes = require('./routes/supplier');
+const fdaDataRoutes = require('./routes/fdaData');
+
+app.use('/api/users', userRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/fda', fdaDataRoutes);
+
 // Basic Route
 app.get('/', (req, res) => {
   res.send('Hello World!');

@@ -1,29 +1,25 @@
+// fdaData.js
 const express = require('express');
 const router = express.Router();
-const FdaData = require('../models/FdaData'); // Assuming you have an FdaData model
+const FdaData = require('../models/FdaData');
 
-// POST request to add FDA data
+// FDA Data routes
 router.post('/', async (req, res) => {
-  const { drugName, shortageStatus, details } = req.body;
-
-  if (!drugName || !shortageStatus || !details) {
-    return res
-      .status(400)
-      .json({ message: 'All fields are required' });
-  }
-
   try {
-    const newFdaData = new FdaData({
-      drugName,
-      shortageStatus,
-      details,
-    });
-    await newFdaData.save();
-    res.status(201).json(newFdaData);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Error creating FDA data', error });
+    const fdaData = new FdaData(req.body);
+    await fdaData.save();
+    res.status(201).send(fdaData);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const fdaData = await FdaData.find({});
+    res.send(fdaData);
+  } catch (e) {
+    res.status(500).send(e);
   }
 });
 

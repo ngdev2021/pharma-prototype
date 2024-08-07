@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+Overview
+This project is a dashboard application for managing various aspects of a pharmaceutical business, including orders, inventory, suppliers, FDA data, and users. The dashboard is built using React for the frontend and Node.js with Express for the backend. The data is stored in a MongoDB database.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Features
+Order Management: View and manage customer orders.
+Inventory Management: Track and update inventory items.
+Supplier Management: Manage supplier information and items supplied.
+FDA Data Management: Fetch and display FDA drug data.
+User Management: Manage user information and roles.
+Technologies Used
+Frontend: React, Axios
+Backend: Node.js, Express.js
+Database: MongoDB
+Styling: CSS, Bootstrap
+Authentication: JWT (JSON Web Tokens)
+Setup Instructions
+Prerequisites
+Node.js
+npm (Node Package Manager)
+MongoDB
+Installation
+Clone the repository:
 
-## Available Scripts
+git clone https://github.com/your-username/pharma-prototype.git
+cd pharma-prototype
+Install backend dependencies:
 
-In the project directory, you can run:
 
-### `npm start`
+cd pharma-prototype
+npm install
+Install frontend dependencies:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+cd pharma-dashboard
+npm install
+Set up environment variables:
 
-### `npm test`
+Create a .env file in the root of the project.
+Add the following environment variables:
+env
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+MONGODB_URI=mongodb+srv://ngdev21:rylan07a@cluster0.34tiicv.mongodb.net/pharma-prototype?retryWrites=true&w=majority
+JWT_SECRET=your_jwt_secret
+PORT=5000
+Run the backend server:
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+npm start
+Run the frontend server:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+cd pharma-dashboard
+npm start
+API Endpoints
+Orders: /api/orders
+Inventory: /api/inventory
+Suppliers: /api/suppliers
+FDA Data: /api/fda-data
+Users: /api/users
+Components
+OrderManagement: Displays and manages orders.
+InventoryManagement: Displays and manages inventory items.
+SupplierManagement: Displays and manages supplier information.
+FDADataManagement: Displays and manages FDA data.
+UserManagement: Displays and manages users.
+Usage
+Navigate to the dashboard:
+Open http://localhost:3000 in your browser.
 
-### `npm run eject`
+Interact with the components:
+Use the navigation bar to switch between different management views.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Contributing
+Fork the repository.
+Create your feature branch: git checkout -b feature-name
+Commit your changes: git commit -m 'Add some feature'
+Push to the branch: git push origin feature-name
+Open a pull request.
+License
+This project is licensed under the MIT License.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Contact
+For any inquiries, please contact Reginald Brown.

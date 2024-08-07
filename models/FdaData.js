@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const FdaDataSchema = new Schema({
-  drugName: {
-    type: String,
-    required: true,
+const FDADataSchema = new Schema(
+  {
+    drugName: {
+      type: String,
+      required: true,
+    },
+    shortageStatus: {
+      type: String,
+      required: true,
+    },
+    details: {
+      type: String,
+      required: true,
+    },
   },
-  shortageStatus: {
-    type: String,
-    required: true,
-  },
-  details: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('FdaData', FdaDataSchema);
+module.exports = mongoose.model('FDAData', FDADataSchema);

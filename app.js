@@ -13,7 +13,9 @@ app.use(cors());
 // Connect to MongoDB
 mongoose.connect(
   'mongodb+srv://ngdev21:rylan07a@cluster0.34tiicv.mongodb.net/pharma-prototype?retryWrites=true&w=majority&appName=Cluster0',
-  {}
+  {
+    serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+  }
 );
 
 const db = mongoose.connection;
@@ -32,7 +34,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/suppliers', supplierRoutes);
-app.use('/api/fda', fdaDataRoutes);
+app.use('/api/fda-data', fdaDataRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+// src/App.js
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
 } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import UserManagement from './components/UserManagement';
 import OrderManagement from './components/OrderManagement';
 import FDADataManagement from './components/FDADataManagement';
@@ -18,6 +20,14 @@ const App = () => {
   const [token, setToken] = useState(
     localStorage.getItem('token') || ''
   );
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (token) {
+      const decodedUser = jwtDecode(token);
+      setUser(decodedUser.user);
+    }
+  }, [token]);
 
   const setAuthToken = (token) => {
     localStorage.setItem('token', token);
@@ -27,11 +37,16 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken('');
+    setUser(null);
   };
 
   return (
     <Router>
-      <Navbar token={token} handleLogout={handleLogout} />
+      <Navbar
+        isLoggedIn={!!token}
+        user={user}
+        onLogout={handleLogout}
+      />
       <Routes>
         <Route
           path="/login"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Table, Alert } from 'react-bootstrap';
 
 const FDADataManagement = () => {
   const [fdaData, setFdaData] = useState([]);
@@ -31,18 +32,35 @@ const FDADataManagement = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <h1>FDA Data Management</h1>
-      {error && <p>There was an error fetching the FDA data!</p>}
-      <ul>
-        {fdaData.map((data) => (
-          <li key={data._id}>
-            Drug Name: {data.drugName}, Status: {data.shortageStatus},
-            Details: {data.details}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {error ? (
+        <Alert variant="danger">
+          There was an error fetching the FDA data!
+        </Alert>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Drug Name</th>
+              <th>Manufacturer</th>
+              <th>Approval Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fdaData.map((item) => (
+              <tr key={item._id}>
+                <td>{item._id}</td>
+                <td>{item.drugName}</td>
+                <td>{item.manufacturer}</td>
+                <td>{item.approvalDate}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 };
 

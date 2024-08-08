@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Table, Alert } from 'react-bootstrap';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -31,18 +32,35 @@ const UserManagement = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <h1>User Management</h1>
-      {error && <p>There was an error fetching the users!</p>}
-      <ul>
-        {users.map((user) => (
-          <li key={user._id}>
-            User ID: {user._id}, Name: {user.name}, Email:{' '}
-            {user.email}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {error ? (
+        <Alert variant="danger">
+          There was an error fetching the users!
+        </Alert>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>{user._id}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 };
 

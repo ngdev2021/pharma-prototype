@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Table, Alert } from 'react-bootstrap';
 
 const InventoryManagement = () => {
   const [inventory, setInventory] = useState([]);
@@ -31,18 +32,35 @@ const InventoryManagement = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <h1>Inventory Management</h1>
-      {error && <p>There was an error fetching the inventory!</p>}
-      <ul>
-        {inventory.map((item) => (
-          <li key={item._id}>
-            Item Name: {item.itemName}, Quantity: {item.quantity},
-            Expiration Date: {item.expirationDate}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {error ? (
+        <Alert variant="danger">
+          There was an error fetching the inventory!
+        </Alert>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Drug Name</th>
+              <th>Quantity</th>
+              <th>Supplier</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inventory.map((item) => (
+              <tr key={item._id}>
+                <td>{item._id}</td>
+                <td>{item.drugName}</td>
+                <td>{item.quantity}</td>
+                <td>{item.supplier}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 };
 

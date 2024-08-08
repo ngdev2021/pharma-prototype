@@ -1,16 +1,8 @@
+// src/components/Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 
 const Register = ({ setToken }) => {
   const [name, setName] = useState('');
@@ -29,44 +21,49 @@ const Register = ({ setToken }) => {
       setToken(response.data.token);
       navigate('/users');
     } catch (error) {
-      setError('Registration failed. Please try again.');
+      setError('Registration failed');
     }
   };
 
   return (
     <Container>
-      <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
+      <h1>Register</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
             type="text"
+            placeholder="Enter name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
+        </Form.Group>
+
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
             type="email"
+            placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
+        </Form.Group>
+
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
-        </div>
-        <button type="submit">Register</button>
-      </form>
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
     </Container>
   );
 };

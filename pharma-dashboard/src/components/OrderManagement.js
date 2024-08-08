@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Table, Alert } from 'react-bootstrap';
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -31,18 +32,35 @@ const OrderManagement = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <h1>Order Management</h1>
-      {error && <p>There was an error fetching the orders!</p>}
-      <ul>
-        {orders.map((order) => (
-          <li key={order._id}>
-            Order ID: {order._id}, User ID: {order.userId}, Status:{' '}
-            {order.status}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {error ? (
+        <Alert variant="danger">
+          There was an error fetching the orders!
+        </Alert>
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Drug Name</th>
+              <th>Quantity</th>
+              <th>Supplier</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order._id}>
+                <td>{order._id}</td>
+                <td>{order.drugName}</td>
+                <td>{order.quantity}</td>
+                <td>{order.supplier}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 };
 

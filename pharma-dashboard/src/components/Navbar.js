@@ -1,19 +1,14 @@
+// src/components/Navbar.js
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import styled from 'styled-components';
-import { jwtDecode } from 'jwt-decode';
 
 const StyledNavbar = styled(Navbar)`
   background-color: #343a40;
 `;
 
-const AppNavbar = ({ token, handleLogout }) => {
-  let userName = '';
-
-  if (token) {
-    const decoded = jwtDecode(token);
-    userName = decoded.user.name;
-  }
+const AppNavbar = ({ isLoggedIn, user, onLogout }) => {
+  const greeting = user ? `Hello, ${user.name}` : '';
 
   return (
     <StyledNavbar expand="lg" variant="dark">
@@ -28,13 +23,11 @@ const AppNavbar = ({ token, handleLogout }) => {
             <Nav.Link href="/suppliers">Suppliers</Nav.Link>
             <Nav.Link href="/fda-data">FDA Data</Nav.Link>
           </Nav>
-          <Nav className="ms-auto">
-            {token ? (
+          <Nav>
+            {isLoggedIn ? (
               <>
-                <Nav.Link href="#">{`Hello, ${userName}`}</Nav.Link>
-                <Nav.Link href="#" onClick={handleLogout}>
-                  Logout
-                </Nav.Link>
+                <Nav.Link>{greeting}</Nav.Link>
+                <Nav.Link onClick={onLogout}>Logout</Nav.Link>
               </>
             ) : (
               <>

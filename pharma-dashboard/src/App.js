@@ -1,38 +1,92 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
 } from 'react-router-dom';
 import UserManagement from './components/UserManagement';
-import InventoryManagement from './components/InventoryManagement';
 import OrderManagement from './components/OrderManagement';
-import SupplierManagement from './components/SupplierManagement';
 import FDADataManagement from './components/FDADataManagement';
+import SupplierManagement from './components/SupplierManagement';
+import InventoryManagement from './components/InventoryManagement';
+import Login from './components/Login';
+import Register from './components/Register';
+import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 
-function App() {
+const App = () => {
+  const [token, setToken] = useState(
+    localStorage.getItem('token') || ''
+  );
+
+  const setAuthToken = (token) => {
+    localStorage.setItem('token', token);
+    setToken(token);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken('');
+  };
+
   return (
     <Router>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/users" element={<UserManagement />} />
-          <Route
-            path="/inventory"
-            element={<InventoryManagement />}
-          />
-          <Route path="/orders" element={<OrderManagement />} />
-          <Route path="/suppliers" element={<SupplierManagement />} />
-          <Route path="/fda-data" element={<FDADataManagement />} />
-          <Route
-            path="/"
-            element={<h1>Welcome to Pharma Dashboard</h1>}
-          />
-        </Routes>
-      </div>
+      <Navbar token={token} handleLogout={handleLogout} />
+      <Routes>
+        <Route
+          path="/login"
+          element={<Login setToken={setAuthToken} />}
+        />
+        <Route
+          path="/register"
+          element={<Register setToken={setAuthToken} />}
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute component={UserManagement} token={token} />
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <PrivateRoute component={OrderManagement} token={token} />
+          }
+        />
+        <Route
+          path="/fda-data"
+          element={
+            <PrivateRoute
+              component={FDADataManagement}
+              token={token}
+            />
+          }
+        />
+        <Route
+          path="/suppliers"
+          element={
+            <PrivateRoute
+              component={SupplierManagement}
+              token={token}
+            />
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            <PrivateRoute
+              component={InventoryManagement}
+              token={token}
+            />
+          }
+        />
+        <Route
+          path="/"
+          element={<div>Welcome to Pharma Prototype Dashboard</div>}
+        />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;

@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const { faker } = require('@faker-js/faker');
+const fs = require('fs');
 const User = require('./models/user');
 const Inventory = require('./models/inventory');
 const Order = require('./models/order');
 const Supplier = require('./models/supplier');
 const FdaData = require('./models/fdaData');
+const bcrypt = require('bcrypt');
 
 const MONGODB_URI =
   'mongodb+srv://ngdev21:rylan07a@cluster0.34tiicv.mongodb.net/pharma-prototype?retryWrites=true&w=majority';
@@ -18,18 +20,26 @@ mongoose
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
-// Function to seed users
+// Function to seed users and save details to a file
 const seedUsers = async () => {
   await User.deleteMany({});
+  const userList = [];
   for (let i = 0; i < 20; i++) {
+    const password = faker.internet.password();
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       name: faker.name.fullName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: hashedPassword,
       role: 'user',
     });
     await user.save();
+    userList.push({ email: user.email, password });
   }
+  fs.writeFileSync(
+    'userList.json',
+    JSON.stringify(userList, null, 2)
+  );
 };
 
 // Function to seed inventory

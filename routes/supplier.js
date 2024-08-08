@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Supplier = require('../models/Supplier');
+const auth = require('../middleware/auth');
 
 // Create a new supplier
 router.post('/', async (req, res) => {
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all suppliers
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const suppliers = await Supplier.find();
     res.json(suppliers);

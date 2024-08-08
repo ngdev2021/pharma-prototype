@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const FdaData = require('../models/FdaData');
+const auth = require('../middleware/auth');
 
 // FDA Data routes
 router.post('/', async (req, res) => {
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const fdaData = await FdaData.find({});
     res.send(fdaData);

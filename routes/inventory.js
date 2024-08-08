@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Inventory = require('../models/Inventory');
+const auth = require('../middleware/auth');
 
 // Create a new inventory item
 router.post('/', async (req, res) => {
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all inventory items
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const items = await Inventory.find();
     res.json(items);

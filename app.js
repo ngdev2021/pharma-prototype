@@ -2,17 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const dotenv = require('dotenv');
+const auth = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+dotenv.config();
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(
-  'mongodb+srv://ngdev21:rylan07a@cluster0.34tiicv.mongodb.net/pharma-prototype?retryWrites=true&w=majority&appName=Cluster0',
+  process.env.MONGO_URI,
+
   {
     serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
   }
@@ -29,12 +33,14 @@ const inventoryRoutes = require('./routes/inventory');
 const orderRoutes = require('./routes/order');
 const supplierRoutes = require('./routes/supplier');
 const fdaDataRoutes = require('./routes/fdaData');
+const authRoutes = require('./routes/auth');
 
 app.use('/api/users', userRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/fda-data', fdaDataRoutes);
+app.use('/api', authRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

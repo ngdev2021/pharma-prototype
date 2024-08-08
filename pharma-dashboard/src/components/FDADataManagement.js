@@ -1,58 +1,48 @@
-// src/components/FDADataManagement.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  padding: 20px;
-`;
 
 const FDADataManagement = () => {
   const [fdaData, setFdaData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:5000/api/fda-data')
-      .then((response) => {
+    const fetchFdaData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          'http://localhost:5000/api/fda-data',
+          {
+            headers: {
+              'x-auth-token': token,
+            },
+          }
+        );
         setFdaData(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error);
         console.error(
           'There was an error fetching the FDA data!',
           error
         );
-      });
+      }
+    };
+
+    fetchFdaData();
   }, []);
 
   return (
-    <Container className="container">
-      <h1 className="mb-4">FDA Data Management</h1>
-      {error && (
-        <p className="alert alert-danger">
-          There was an error fetching the FDA data!
-        </p>
-      )}
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Drug Name</th>
-            <th scope="col">Shortage Status</th>
-            <th scope="col">Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fdaData.map((data) => (
-            <tr key={data._id}>
-              <td>{data.drugName}</td>
-              <td>{data.shortageStatus}</td>
-              <td>{data.details}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Container>
+    <div>
+      <h1>FDA Data Management</h1>
+      {error && <p>There was an error fetching the FDA data!</p>}
+      <ul>
+        {fdaData.map((data) => (
+          <li key={data._id}>
+            Drug Name: {data.drugName}, Status: {data.shortageStatus},
+            Details: {data.details}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

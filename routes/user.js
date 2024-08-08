@@ -1,25 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-
-// Create a new user
-router.post('/', async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    await newUser.save();
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+const auth = require('../middleware/auth');
+const User = require('../models/user');
 
 // Get all users
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send('Server Error');
+  }
+});
+
+// Login route
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid Credentials' });
+    }
+
+    // Assuming password verification logic here
+    // ...
+
+    const token = jwt.sign(
+      { user: { id: user.id, name: user.name } },
+      'your_jwt_secret',
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).send('Server Error');
   }
 });
 

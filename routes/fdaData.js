@@ -3,8 +3,20 @@ const express = require('express');
 const router = express.Router();
 const FdaData = require('../models/FdaData');
 const auth = require('../middleware/auth');
+const DrugShortage = require('../models/DrugShortage.js');
 
 // FDA Data routes
+
+// GET all drug shortages
+router.get('/shortages', async (req, res) => {
+  try {
+    const shortages = await DrugShortage.find({});
+    res.json(shortages);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     const fdaData = new FdaData(req.body);

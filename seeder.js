@@ -1,111 +1,149 @@
 const mongoose = require('mongoose');
 const { faker } = require('@faker-js/faker');
-const fs = require('fs');
+const bcrypt = require('bcrypt');
+const Buyer = require('./models/buyer');
 const User = require('./models/user');
 const Inventory = require('./models/inventory');
 const Order = require('./models/order');
 const Supplier = require('./models/supplier');
 const FdaData = require('./models/fdaData');
-const bcrypt = require('bcrypt');
-
+const DrugShortage = require('./models/DrugShortage.js');
+const fs = require('fs');
+const drugShortageData = require('./drugShortage.json');
 const MONGODB_URI =
   'mongodb+srv://ngdev21:rylan07a@cluster0.34tiicv.mongodb.net/pharma-prototype?retryWrites=true&w=majority';
 
 // Connect to MongoDB
 mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
-// Function to seed users and save details to a file
+// Function to seed users
 const seedUsers = async () => {
   await User.deleteMany({});
-  const userList = [];
+  const users = [];
+  const userCredentials = [];
   for (let i = 0; i < 20; i++) {
-    const password = faker.internet.password();
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const plainPassword = faker.internet.password();
+    const password = await bcrypt.hash(plainPassword, 10);
     const user = new User({
-      name: faker.name.fullName(),
+      name: faker.person.fullName(),
       email: faker.internet.email(),
-      password: hashedPassword,
+      password: password,
       role: 'user',
     });
+    users.push(user);
+    userCredentials.push({
+      name: user.name,
+      email: user.email,
+      password: plainPassword,
+    });
     await user.save();
-    userList.push({ email: user.email, password });
   }
-  fs.writeFileSync(
-    'userList.json',
-    JSON.stringify(userList, null, 2)
+  // Save the user details with plain passwords to a file for testing purposes
+  require('fs').writeFileSync(
+    'userCredentials.json',
+    JSON.stringify(userCredentials, null, 2)
   );
 };
 
-// Function to seed inventory
+// Function to seed suppliers from JSON data
 const seedInventory = async () => {
   await Inventory.deleteMany({});
-  for (let i = 0; i < 20; i++) {
+  const suppliers = await Supplier.find({});
+  for (let item of drugShortageData) {
+    const supplier = suppliers.find(
+      (sup) => sup.name === item['Company Name']
+    );
     const inventoryItem = new Inventory({
-      itemName: faker.commerce.productName(),
-      quantity: faker.datatype.number({ min: 1, max: 100 }),
+      itemName: item['Generic Name'],
+      drugName: item['Generic Name'],
+      supplier: supplier ? supplier.name : null,
+      quantity: faker.number.int({ min: 1, max: 100 }),
       expirationDate: faker.date.future(),
+      price: faker.commerce.price({
+        min: 10,
+        max: 200,
+        dec: 2,
+        symbol: '$',
+      }),
+      description: item['Therapeutic Category'],
     });
     await inventoryItem.save();
   }
+  console.log('Inventory seeded');
 };
 
-// Function to seed orders
 const seedOrders = async () => {
   await Order.deleteMany({});
   const users = await User.find({});
+  const buyers = await Buyer.find({});
   const inventory = await Inventory.find({});
   for (let i = 0; i < 20; i++) {
     const order = new Order({
       userId:
-        users[
-          faker.datatype.number({ min: 0, max: users.length - 1 })
-        ]._id,
+        users[faker.number.int({ min: 0, max: users.length - 1 })]
+          ._id,
+      buyer:
+        buyers[faker.number.int({ min: 0, max: buyers.length - 1 })]
+          .name,
+
       items: [
         {
           itemId:
             inventory[
-              faker.datatype.number({
-                min: 0,
-                max: inventory.length - 1,
-              })
+              faker.number.int({ min: 0, max: inventory.length - 1 })
             ]._id,
-          quantity: faker.datatype.number({ min: 1, max: 5 }),
+          supplier:
+            inventory[
+              faker.number.int({ min: 0, max: inventory.length - 1 })
+            ].supplier,
+          // get item name from inventory
+          drugName:
+            inventory[
+              faker.number.int({ min: 0, max: inventory.length - 1 })
+            ].drugName,
+          quantity: faker.number.int({ min: 1, max: 5 }),
         },
       ],
-      status: 'Pending',
+      status: faker.helpers.arrayElement([
+        'Pending',
+        'Completed',
+        'Cancelled',
+      ]),
+      orderDate: faker.date.past(),
+      totalAmount: faker.commerce.price({
+        min: 100,
+        max: 1000,
+        dec: 2,
+        symbol: '$',
+      }),
     });
     await order.save();
   }
+  console.log('Orders seeded');
 };
 
-// Function to seed suppliers
 const seedSuppliers = async () => {
   await Supplier.deleteMany({});
-  const inventory = await Inventory.find({});
-  for (let i = 0; i < 20; i++) {
+  const companyNames = [
+    ...new Set(drugShortageData.map((item) => item['Company Name'])),
+  ];
+  for (let companyName of companyNames) {
     const supplier = new Supplier({
-      name: faker.company.name(),
+      name: companyName,
       contactInfo: faker.phone.number(),
-      itemsSupplied: [
-        {
-          itemId:
-            inventory[
-              faker.datatype.number({
-                min: 0,
-                max: inventory.length - 1,
-              })
-            ]._id,
-        },
-      ],
+      address: faker.location.streetAddress(),
+      status: faker.helpers.arrayElement([
+        'Active',
+        'Inactive',
+        'Pending',
+      ]),
     });
     await supplier.save();
   }
+  console.log('Suppliers seeded');
 };
 
 // Function to seed FDA data
@@ -118,19 +156,114 @@ const seedFdaData = async () => {
         'Available',
         'Shortage',
       ]),
-      details: faker.lorem.sentence(),
+      details: faker.lorem.paragraph(),
+      approvalDate: faker.date.past(),
     });
     await fdaData.save();
   }
 };
 
+const seedDrugShortages = async () => {
+  const rawDrugShortages = JSON.parse(
+    fs.readFileSync('./drugShortage.json', 'utf8')
+  );
+
+  const sanitizedDrugShortages = rawDrugShortages.map((drug) => ({
+    generic_name: drug['generic_name'] || drug['Generic Name'] || '',
+    company_name: drug['company_name'] || drug['Company Name'] || '',
+    contact_info:
+      drug['contact_info'] || drug['Contact Information'] || '',
+    presentation: drug['presentation'] || drug['Presentation'] || '',
+    type_of_update:
+      drug['type_of_update'] || drug['Type of Update'] || '',
+    date_of_update:
+      parseDate(drug['date_of_update'] || drug['Date of Update']) ||
+      new Date(),
+    availability_info:
+      drug['availability_info'] ||
+      drug['Availability Information'] ||
+      '',
+    related_info:
+      drug['related_info'] || drug['Related Information'] || '',
+    resolved_note: drug['resolved_note'] || drug['Note'] || '',
+    reason_for_shortage:
+      drug['reason_for_shortage'] ||
+      drug['Reason for Shortage'] ||
+      '',
+    therapeutic_category:
+      drug['therapeutic_category'] ||
+      drug['Therapeutic Category'] ||
+      '',
+    status: drug['status'] || drug['Status'] || '',
+    change_date:
+      parseDate(drug['change_date'] || drug['Change Date']) ||
+      new Date(),
+    date_discontinued:
+      parseDate(
+        drug['date_discontinued'] || drug['Date Discontinued']
+      ) || null,
+    initial_posting_date:
+      parseDate(
+        drug['initial_posting_date'] || drug['Initial Posting Date']
+      ) || new Date(),
+  }));
+
+  await DrugShortage.deleteMany({});
+  await DrugShortage.insertMany(sanitizedDrugShortages);
+  console.log('Drug shortages seeded');
+};
+
+const seedBuyers = async () => {
+  await Buyer.deleteMany({});
+  const inventory = await Inventory.find({});
+  const buyerTypes = [
+    'Hospital',
+    'Doctor',
+    'Clinic',
+    'Government Entity',
+  ];
+  for (let i = 0; i < 20; i++) {
+    const buyer = new Buyer({
+      name: faker.company.name(),
+      type: faker.helpers.arrayElement(buyerTypes),
+      contactInfo: faker.phone.number(),
+      address: faker.location.streetAddress(),
+      drugsNeeded: [
+        inventory[
+          faker.number.int({ min: 0, max: inventory.length - 1 })
+        ]._id,
+      ],
+    });
+    await buyer.save();
+  }
+  console.log('Buyers seeded');
+};
+
 // Run all seed functions
 const seedAll = async () => {
-  await seedUsers();
-  await seedInventory();
-  await seedOrders();
-  await seedSuppliers();
-  await seedFdaData();
+  try {
+    // const buyers = await seedBuyers();
+    // console.log('Buyers seeded', buyers);
+
+    const suppliers = await seedSuppliers();
+    console.log('Suppliers seeded');
+
+    // await seedInventory();
+    // console.log('Inventory seeded');
+
+    // await seedOrders();
+    // console.log('Orders seeded');
+    // await seedUsers();
+
+    // await seedFdaData();
+
+    // await seedDrugShortages();
+
+    mongoose.disconnect();
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    mongoose.disconnect();
+  }
   mongoose.connection.close();
 };
 

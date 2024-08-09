@@ -8,11 +8,23 @@ const OrderSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    buyer: {
+      type: String,
+      required: true,
+    },
     items: [
       {
         itemId: {
           type: Schema.Types.ObjectId,
           ref: 'Inventory',
+          required: true,
+        },
+        supplier: {
+          type: String,
+          required: true,
+        },
+        drugName: {
+          type: String,
           required: true,
         },
         quantity: {

@@ -1,22 +1,13 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const InventorySchema = new Schema(
-  {
-    itemName: {
-      type: String,
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    expirationDate: {
-      type: Date,
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+const InventorySchema = new mongoose.Schema({
+  itemName: String,
+  drugName: String,
+  supplier: String,
+  quantity: Number,
+  expirationDate: Date,
+  price: String,
+  description: String,
+});
 
 module.exports = mongoose.model('Inventory', InventorySchema);

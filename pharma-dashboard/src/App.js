@@ -15,6 +15,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
+import SupplierDetailsPage from './components/SupplierDetailsPage';
 
 const App = () => {
   const [token, setToken] = useState(
@@ -82,6 +83,15 @@ const App = () => {
           element={
             <PrivateRoute
               component={SupplierManagement}
+              token={token}
+            />
+          }
+        />
+        <Route
+          path="/suppliers/:id"
+          element={
+            <PrivateRoute
+              component={SupplierDetailsPage}
               token={token}
             />
           }

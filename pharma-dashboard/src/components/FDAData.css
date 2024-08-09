@@ -1,0 +1,16 @@
+.container {
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+h1 {
+  text-align: center;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}

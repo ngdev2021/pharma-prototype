@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const Order = require('../models/order');
+const Order = require('../models/Order');
 
 // Get all orders
 router.get('/', auth, async (req, res) => {

@@ -1,27 +1,28 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const SupplierSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    contactInfo: {
-      type: String,
-      required: true,
-    },
-    itemsSupplied: [
-      {
-        itemId: {
-          type: Schema.Types.ObjectId,
-          ref: 'Inventory',
-          required: true,
-        },
-      },
-    ],
+const SupplierSchema = new mongoose.Schema({
+  name: String,
+  status: {
+    type: String,
+    required: false,
+    enum: ['Active', 'Inactive', 'Pending'],
   },
-  { timestamps: true }
-);
+  contactInfo: String,
+  address: String,
+  itemsSupplied: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Inventory' },
+  ],
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Review',
+    },
+  ],
+});
 
 module.exports = mongoose.model('Supplier', SupplierSchema);

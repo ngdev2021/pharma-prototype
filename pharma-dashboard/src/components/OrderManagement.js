@@ -46,15 +46,18 @@ const OrderManagement = () => {
               <th>Drug Name</th>
               <th>Quantity</th>
               <th>Supplier</th>
+              <th>Buyer</th>
             </tr>
           </thead>
           <tbody>
+            {console.log(orders)}
             {orders.map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
-                <td>{order.drugName}</td>
-                <td>{order.quantity}</td>
-                <td>{order.supplier}</td>
+                <td>{order.items[0].drugName}</td>
+                <td>{order.items[0].quantity}</td>
+                <td>{order.items[0].supplier}</td>
+                <td>{order.buyer}</td>
               </tr>
             ))}
           </tbody>

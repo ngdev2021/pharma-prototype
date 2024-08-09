@@ -16,6 +16,7 @@ import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import SupplierDetailsPage from './components/SupplierDetailsPage';
+import UserDetailsPage from './components/UserDetailsPage';
 
 const App = () => {
   const [token, setToken] = useState(
@@ -103,6 +104,12 @@ const App = () => {
               component={InventoryManagement}
               token={token}
             />
+          }
+        />
+        <Route
+          path="/users/:id"
+          element={
+            <PrivateRoute component={UserDetailsPage} token={token} />
           }
         />
         <Route

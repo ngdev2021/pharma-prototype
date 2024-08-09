@@ -1,33 +1,64 @@
-import React from 'react';
-import { Card, ListGroup, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Button, Form } from 'react-bootstrap';
+import CustomModal from './CustomModal'; // Import the reusable modal
 
-const ProductAssociations = ({ supplier }) => {
+const ProductAssociations = ({ supplier, setSupplier }) => {
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [newProduct, setNewProduct] = useState('');
+
+  const handleShowProductModal = () => {
+    setShowProductModal(true);
+  };
+
+  const handleCloseProductModal = () => {
+    setShowProductModal(false);
+  };
+
+  const handleAddProduct = () => {
+    setSupplier({
+      ...supplier,
+      products: [...(supplier.products || []), newProduct],
+    });
+    setNewProduct('');
+    handleCloseProductModal();
+  };
+
   return (
     <Card className="mb-4">
-      <Card.Header as="h5">Products Supplied</Card.Header>
-      <Card.Body>
-        <ListGroup>
-          {supplier.products?.length > 0 ? (
-            supplier.products.map((product, index) => (
-              <ListGroup.Item key={index}>
-                {product}
-                <Button
-                  variant="danger"
-                  size="sm"
-                  className="float-right"
-                >
-                  Remove
-                </Button>
-              </ListGroup.Item>
-            ))
-          ) : (
-            <ListGroup.Item>No products associated.</ListGroup.Item>
-          )}
-        </ListGroup>
-        <Button variant="primary" className="mt-3">
+      <Card.Header className="d-flex justify-content-between align-items-center">
+        <h5>Product Associations</h5>
+        <Button variant="primary" onClick={handleShowProductModal}>
           Add Product
         </Button>
+      </Card.Header>
+      <Card.Body>
+        {supplier.products?.length > 0 ? (
+          <ul>
+            {supplier.products.map((product, index) => (
+              <li key={index}>{product}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No products associated with this supplier.</p>
+        )}
       </Card.Body>
+
+      {/* Reusable Add Product Modal */}
+      <CustomModal
+        show={showProductModal}
+        onHide={handleCloseProductModal}
+        title="Add Product"
+        onSave={handleAddProduct}
+      >
+        <Form.Group controlId="newProduct">
+          <Form.Label>Product Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={newProduct}
+            onChange={(e) => setNewProduct(e.target.value)}
+          />
+        </Form.Group>
+      </CustomModal>
     </Card>
   );
 };

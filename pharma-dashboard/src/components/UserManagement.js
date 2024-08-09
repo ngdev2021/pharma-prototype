@@ -8,9 +8,11 @@ import {
   Form,
   Row,
   Col,
+  Badge,
 } from 'react-bootstrap';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 // Styled Components
 const StyledContainer = styled(Container)`
@@ -25,6 +27,26 @@ const SortableHeader = styled.th`
   cursor: pointer;
   &:hover {
     background-color: #f1f1f1;
+  }
+`;
+
+const UserAvatar = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-size: 18px;
+`;
+
+const UserRow = styled.tr`
+  cursor: pointer;
+  &:hover {
+    background-color: #f8f9fa;
   }
 `;
 
@@ -44,6 +66,7 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -98,6 +121,10 @@ const UserManagement = () => {
     return values.some((value) => value.includes(term));
   });
 
+  const handleUserClick = (userId) => {
+    navigate(`/users/${userId}`);
+  };
+
   if (loading) {
     return (
       <StyledContainer className="text-center my-4">
@@ -146,12 +173,22 @@ const UserManagement = () => {
         </thead>
         <tbody>
           {filteredUsers.map((user) => (
-            <tr key={user._id}>
+            <UserRow
+              key={user._id}
+              onClick={() => handleUserClick(user._id)}
+            >
               <td>{user._id}</td>
-              <td>{user.name}</td>
+              <td className="d-flex align-items-center">
+                <UserAvatar>
+                  {user.name.charAt(0).toUpperCase()}
+                </UserAvatar>
+                {user.name}
+              </td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
-            </tr>
+              <td>
+                <Badge variant="primary">{user.role}</Badge>
+              </td>
+            </UserRow>
           ))}
         </tbody>
       </Table>

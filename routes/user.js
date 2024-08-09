@@ -39,4 +39,24 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Get user by ID
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+});
+
+// Get user orders
+router.get('/:id/orders', auth, async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.params.id });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;

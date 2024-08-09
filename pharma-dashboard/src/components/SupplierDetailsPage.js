@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+  fetchSupplierById,
+  fetchSupplierReviews,
+} from '../utils/utilities';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import SupplierOverview from './SupplierOverview';
@@ -20,17 +24,11 @@ const SupplierDetailsPage = () => {
   const { currentUser } = useAppContext();
 
   useEffect(() => {
-    const fetchSupplier = async () => {
+    const fetchSupplierData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/suppliers/${id}`,
-          {
-            headers: {
-              'x-auth-token': localStorage.getItem('token'),
-            },
-          }
-        );
-        setSupplier(response.data);
+        const fetchedSupplier = await fetchSupplierById(id);
+        const reviews = await fetchSupplierReviews(id);
+        setSupplier({ ...fetchedSupplier, reviews });
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch supplier details');
@@ -38,12 +36,12 @@ const SupplierDetailsPage = () => {
       }
     };
 
-    fetchSupplier();
+    fetchSupplierData();
   }, [id]);
 
   const handleSaveReview = async () => {
-    if (!supplier.rating) {
-      alert('Please provide a rating for the supplier.');
+    if (!supplier.rating || !supplier.review) {
+      alert('Please provide both a rating and a review.');
       return;
     }
 
@@ -55,7 +53,7 @@ const SupplierDetailsPage = () => {
     };
 
     try {
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:5000/api/reviews',
         newReview,
         {
@@ -65,15 +63,9 @@ const SupplierDetailsPage = () => {
         }
       );
 
-      const supplierResponse = await axios.get(
-        `http://localhost:5000/api/suppliers/${supplier._id}`,
-        {
-          headers: {
-            'x-auth-token': localStorage.getItem('token'),
-          },
-        }
-      );
-      setSupplier(supplierResponse.data);
+      // Re-fetch updated reviews
+      const updatedReviews = await fetchSupplierReviews(supplier._id);
+      setSupplier({ ...supplier, reviews: updatedReviews });
     } catch (error) {
       console.error(
         'Failed to save review:',
@@ -97,8 +89,14 @@ const SupplierDetailsPage = () => {
 
   return (
     <div>
-      <SupplierOverview supplier={supplier} />
-      <ProductAssociations supplier={supplier} />
+      <SupplierOverview
+        supplier={supplier}
+        setSupplier={setSupplier}
+      />
+      <ProductAssociations
+        supplier={supplier}
+        setSupplier={setSupplier}
+      />
       <ActivityLog supplier={supplier} />
       <PerformanceMetrics metrics={supplier.metrics} />
       <ContractsAndCompliance supplier={supplier} />

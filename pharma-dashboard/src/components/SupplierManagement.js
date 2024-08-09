@@ -19,6 +19,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { useAppContext } from '../context/AppContext';
+import { fetchSupplierReviews } from '../utils/utilities'; // Import the utility function
 
 // Styled Components
 const StyledContainer = styled(Container)`
@@ -114,15 +115,12 @@ const SupplierManagement = () => {
 
   const handleShowModal = async (supplier = null) => {
     if (supplier) {
-      const reviewsResponse = await axios.get(
-        `http://localhost:5000/api/reviews?supplierId=${supplier._id}`,
-        {
-          headers: {
-            'x-auth-token': localStorage.getItem('token'),
-          },
-        }
-      );
-      supplier.reviews = reviewsResponse.data;
+      try {
+        const reviews = await fetchSupplierReviews(supplier._id);
+        supplier.reviews = reviews;
+      } catch (error) {
+        console.error('Failed to fetch reviews for modal:', error);
+      }
     }
     setCurrentSupplier(supplier);
     setShowModal(true);

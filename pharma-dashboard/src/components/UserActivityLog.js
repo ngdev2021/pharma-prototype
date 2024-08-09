@@ -15,7 +15,33 @@ const UserActivityLog = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
-  const activityLog = user?.activityLog || [];
+  const activityLog = user?.activityLog || [
+    {
+      type: 'login',
+      message: 'User logged in',
+      timestamp: new Date(),
+    },
+    {
+      type: 'edit',
+      message: 'User updated profile',
+      timestamp: new Date(),
+    },
+    {
+      type: 'delete',
+      message: 'User deleted account',
+      timestamp: new Date(),
+    },
+    {
+      type: 'login',
+      message: 'User logged in',
+      timestamp: new Date(),
+    },
+    {
+      type: 'edit',
+      message: 'User updated profile',
+      timestamp: new Date(),
+    },
+  ];
 
   const debouncedSearchTerm = useMemo(
     () => debounce((term) => setSearchTerm(term), 300),

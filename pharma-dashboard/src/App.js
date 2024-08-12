@@ -6,6 +6,7 @@ import {
   Routes,
 } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import LandingPage from './components/LandingPage';
 import UserManagement from './components/UserManagement';
 import OrderManagement from './components/OrderManagement';
 import FDADataManagement from './components/FDADataManagement';
@@ -17,6 +18,12 @@ import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import SupplierDetailsPage from './components/SupplierDetailsPage';
 import UserDetailsPage from './components/UserDetailsPage';
+import FDAData from './components/FDADataManagement';
+import Dashboard from './components/Dashboard';
+
+import FDAShortageDetail from './components/FDAShortageDetail';
+
+import './App.css';
 
 const App = () => {
   const [token, setToken] = useState(
@@ -59,6 +66,14 @@ const App = () => {
           element={<Register setToken={setAuthToken} />}
         />
         <Route
+          path="/dashboard"
+          element={
+            <Dashboard token={token} user={user} />
+            // <PrivateRoute component={Dashboard} token={token} />
+          }
+        />
+
+        <Route
           path="/users"
           element={
             <PrivateRoute component={UserManagement} token={token} />
@@ -79,6 +94,20 @@ const App = () => {
             />
           }
         />
+        <Route
+          path="/fda-shortages"
+          element={<PrivateRoute component={FDAData} token={token} />}
+        />
+        <Route
+          path="/fda-shortages/:id"
+          element={
+            <PrivateRoute
+              component={FDAShortageDetail}
+              token={token}
+            />
+          }
+        />
+
         <Route
           path="/suppliers"
           element={
@@ -112,10 +141,7 @@ const App = () => {
             <PrivateRoute component={UserDetailsPage} token={token} />
           }
         />
-        <Route
-          path="/"
-          element={<div>Welcome to Pharma Prototype Dashboard</div>}
-        />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );

@@ -15,6 +15,7 @@ import FinancialInfo from './FinancialInfo';
 import ReviewSection from './ReviewSection';
 import CommunicationAndCollaboration from './CommunicationAndCollaboration';
 import SupplierAnalyticsDashboard from './SupplierAnalyticsDashboard';
+import { Breadcrumb } from 'react-bootstrap';
 
 const SupplierDetailsPage = () => {
   const { id } = useParams();
@@ -89,6 +90,12 @@ const SupplierDetailsPage = () => {
 
   return (
     <div>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/suppliers">Suppliers</Breadcrumb.Item>
+        <Breadcrumb.Item active>Supplier Details</Breadcrumb.Item>
+      </Breadcrumb>
+
       <SupplierOverview
         supplier={supplier}
         setSupplier={setSupplier}

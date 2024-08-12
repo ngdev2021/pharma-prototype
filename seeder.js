@@ -6,6 +6,7 @@ const User = require('./models/user');
 const Inventory = require('./models/inventory');
 const Order = require('./models/order');
 const Supplier = require('./models/supplier');
+const Review = require('./models/review');
 const FdaData = require('./models/fdaData');
 const DrugShortage = require('./models/DrugShortage.js');
 const fs = require('fs');
@@ -145,6 +146,41 @@ const seedSuppliers = async () => {
   }
   console.log('Suppliers seeded');
 };
+// Function to seed reviews
+const seedReviews = async () => {
+  const defaultAvatar =
+    'https://img.freepik.com/free-vector/man-red-shirt-with-white-collar_90220-2873.jpg?size=626&ext=jpg';
+  try {
+    // Clear existing reviews
+    await Review.deleteMany({});
+    console.log('All existing reviews deleted');
+
+    const users = await User.find({});
+    const reviews = [];
+
+    users.forEach((user) => {
+      const review = new Review({
+        userId: user._id,
+        userInitials: user.name
+          .split(' ')
+          .map((n) => n[0])
+          .join(''),
+        userName: user.name,
+        title: 'Great Product!',
+        productId: new mongoose.Types.ObjectId(), // Add a valid product ID
+        rating: Math.floor(Math.random() * 5) + 1,
+        comment: 'This product really exceeded my expectations!',
+        avatar: user.avatar || defaultAvatar, // Use user's avatar or default
+      });
+      reviews.push(review);
+    });
+
+    await Review.insertMany(reviews);
+    console.log('New reviews seeded successfully');
+  } catch (err) {
+    console.error('Error seeding reviews:', err);
+  }
+};
 
 // Function to seed FDA data
 const seedFdaData = async () => {
@@ -245,19 +281,26 @@ const seedAll = async () => {
     // const buyers = await seedBuyers();
     // console.log('Buyers seeded', buyers);
 
-    const suppliers = await seedSuppliers();
-    console.log('Suppliers seeded');
+    // const suppliers = await seedSuppliers();
+    // console.log('Suppliers seeded');
 
     // await seedInventory();
     // console.log('Inventory seeded');
 
     // await seedOrders();
     // console.log('Orders seeded');
+
     // await seedUsers();
+    // console.log('Users seeded');
 
     // await seedFdaData();
+    // console.log('FDA data seeded
 
     // await seedDrugShortages();
+    // console.log('Drug shortages seeded
+
+    await seedReviews();
+    console.log('Reviews seeded');
 
     mongoose.disconnect();
   } catch (error) {

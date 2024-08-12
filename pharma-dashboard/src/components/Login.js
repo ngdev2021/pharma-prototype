@@ -18,7 +18,7 @@ const Login = ({ setToken }) => {
         { email, password }
       );
       setToken(response.data.token);
-      navigate('/users');
+      navigate('/dashboard');
     } catch (error) {
       setError('Invalid Credentials');
     }

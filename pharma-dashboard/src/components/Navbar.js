@@ -13,7 +13,7 @@ const AppNavbar = ({ isLoggedIn, user, onLogout }) => {
   return (
     <StyledNavbar expand="lg" variant="dark">
       <Container>
-        <Navbar.Brand href="/">Pharma Dashboard</Navbar.Brand>
+        <Navbar.Brand href="/dashboard">PharmaConnect</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

@@ -34,14 +34,16 @@ const orderRoutes = require('./routes/order');
 const supplierRoutes = require('./routes/supplier');
 const fdaDataRoutes = require('./routes/fdaData');
 const authRoutes = require('./routes/auth');
-const drugShortageRoutes = require('./routes/drugShortage');
+const drugShortageRoutes = require('./routes/drugShortage.js');
 const buyerRoutes = require('./routes/buyer');
 const reviewRoutes = require('./routes/review');
+const dashboardRoutes = require('./routes/dashboard');
 
 app.use('/api/users', userRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/buyers', buyerRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/fda-data', fdaDataRoutes);
 app.use('/api/drug-shortages', drugShortageRoutes);

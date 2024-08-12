@@ -72,75 +72,6 @@ export const fetchOrders = async () => {
   }
 };
 
-export const fetchUsers = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(
-      'http://localhost:5000/api/users',
-      {
-        headers: {
-          'x-auth-token': token,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    throw error;
-  }
-};
-
-export const fetchUserById = async (userId) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/users/${userId}`,
-      {
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    throw error;
-  }
-};
-
-export const fetchUserOrders = async (userId) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/orders?userId=${userId}`,
-      {
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user orders:', error);
-    throw error;
-  }
-};
-
-export const fetchUserReviews = async (userId) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/reviews?userId=${userId}`,
-      {
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user reviews:', error);
-    throw error;
-  }
-};
-
 export const fetchOrderById = async (orderId) => {
   try {
     const response = await axios.get(
@@ -192,6 +123,23 @@ export const fetchOrderReviews = async (orderId) => {
   }
 };
 
+export const fetchUserReviews = async (userId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/reviews?userId=${userId}`,
+      {
+        headers: {
+          'x-auth-token': localStorage.getItem('token'),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user reviews:', error);
+    throw error;
+  }
+};
+
 export const fetchUser = async () => {
   try {
     const token = localStorage.getItem('token');
@@ -206,6 +154,60 @@ export const fetchUser = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching user:', error);
+    throw error;
+  }
+};
+
+export const fetchUserOrders = async (userId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/orders?userId=${userId}`,
+      {
+        headers: {
+          'x-auth-token': localStorage.getItem('token'),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    throw error;
+  }
+};
+
+export const fetchUserById = async (userId) => {
+  console.log(`Fetching user with ID: ${userId}`); // Log the userId
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/users/${userId}`,
+      {
+        headers: {
+          'x-auth-token': localStorage.getItem('token'),
+        },
+      }
+    );
+    console.log('API response:', response.data); // Log the response
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error;
+  }
+};
+
+export const fetchUsers = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(
+      'http://localhost:5000/api/users',
+      {
+        headers: {
+          'x-auth-token': token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
     throw error;
   }
 };

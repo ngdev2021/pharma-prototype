@@ -13,6 +13,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { useNavigate } from 'react-router-dom';
+import { Breadcrumb } from 'react-bootstrap';
 
 // Styled Components
 const StyledContainer = styled(Container)`
@@ -145,6 +146,12 @@ const UserManagement = () => {
 
   return (
     <StyledContainer>
+      <Breadcrumb>
+        <Breadcrumb.Item onClick={() => navigate('/')}>
+          Home
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>Users</Breadcrumb.Item>
+      </Breadcrumb>
       <Row>
         <Col>
           <SearchInput

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Alert } from 'react-bootstrap';
+import { Breadcrumb } from 'react-bootstrap';
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -33,6 +34,10 @@ const OrderManagement = () => {
 
   return (
     <Container>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/dashboard">Dashboard</Breadcrumb.Item>
+        <Breadcrumb.Item active>Order Management</Breadcrumb.Item>
+      </Breadcrumb>
       <h1>Order Management</h1>
       {error ? (
         <Alert variant="danger">

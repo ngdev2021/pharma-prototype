@@ -8,6 +8,7 @@ import {
   Spinner,
   Alert,
   Form,
+  Breadcrumb,
   Row,
   Col,
   Button,
@@ -340,6 +341,10 @@ const SupplierManagement = () => {
 
   return (
     <StyledContainer>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Breadcrumb.Item active>Suppliers</Breadcrumb.Item>
+      </Breadcrumb>
       <Row className="align-items-center mb-3">
         <Col>
           <SearchInput

@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { Breadcrumb } from 'react-bootstrap';
 
 // Styled Components
 const StyledContainer = styled(Container)`
@@ -118,6 +119,11 @@ const InventoryManagement = () => {
 
   return (
     <StyledContainer>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/inventory">Inventory</Breadcrumb.Item>
+        <Breadcrumb.Item active>Inventory Management</Breadcrumb.Item>
+      </Breadcrumb>
       <Row>
         <Col>
           <SearchInput

@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppProvider } from './context/AppContext';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:5000/api'; // Set the base URL globally
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
